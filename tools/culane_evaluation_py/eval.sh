@@ -1,6 +1,6 @@
 #!/bin/bash
 root=../../
-data_dir=../../../../dataset/culane/
+data_dir=/home/work/workspace/pytorch-auto-drive/dataset/culane/
 exp=$1
 detect_dir=../../output/
 

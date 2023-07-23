@@ -1,0 +1,259 @@
+{
+    "dataset": {
+        "name": "GTAV_Segmentation",
+        "image_set": "train",
+        "root": "..\/..\/dataset\/gtav"
+    },
+    "train_augmentation": {
+        "name": "Compose",
+        "transforms": [
+            {
+                "name": "ToTensor"
+            },
+            {
+                "name": "Resize",
+                "size_image": [
+                    1054,
+                    1912
+                ],
+                "size_label": [
+                    1054,
+                    1912
+                ]
+            },
+            {
+                "name": "RandomScale",
+                "min_scale": 0.5,
+                "max_scale": 1.5
+            },
+            {
+                "name": "RandomCrop",
+                "size": [
+                    512,
+                    1024
+                ]
+            },
+            {
+                "name": "RandomHorizontalFlip",
+                "flip_prob": 0.5
+            },
+            {
+                "name": "Normalize",
+                "mean": [
+                    0.485,
+                    0.456,
+                    0.406
+                ],
+                "std": [
+                    0.229,
+                    0.224,
+                    0.225
+                ]
+            },
+            {
+                "name": "LabelMap",
+                "label_id_map": [
+                    255,
+                    255,
+                    255,
+                    255,
+                    255,
+                    255,
+                    255,
+                    0,
+                    1,
+                    255,
+                    255,
+                    2,
+                    3,
+                    4,
+                    255,
+                    255,
+                    255,
+                    5,
+                    255,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    255,
+                    255,
+                    16,
+                    17,
+                    18
+                ],
+                "outlier": true
+            }
+        ]
+    },
+    "test_augmentation": {
+        "name": "Compose",
+        "transforms": [
+            {
+                "name": "ToTensor"
+            },
+            {
+                "name": "Resize",
+                "size_image": [
+                    1024,
+                    2048
+                ],
+                "size_label": [
+                    1024,
+                    2048
+                ]
+            },
+            {
+                "name": "Normalize",
+                "mean": [
+                    0.485,
+                    0.456,
+                    0.406
+                ],
+                "std": [
+                    0.229,
+                    0.224,
+                    0.225
+                ]
+            },
+            {
+                "name": "LabelMap",
+                "label_id_map": [
+                    255,
+                    255,
+                    255,
+                    255,
+                    255,
+                    255,
+                    255,
+                    0,
+                    1,
+                    255,
+                    255,
+                    2,
+                    3,
+                    4,
+                    255,
+                    255,
+                    255,
+                    5,
+                    255,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    255,
+                    255,
+                    16,
+                    17,
+                    18
+                ],
+                "outlier": false
+            }
+        ]
+    },
+    "test_dataset": {
+        "name": "CityscapesSegmentation",
+        "image_set": "train",
+        "root": "..\/..\/dataset\/cityscapes"
+    },
+    "loss": {
+        "name": "torch_loss",
+        "torch_loss_class": "CrossEntropyLoss",
+        "ignore_index": 255
+    },
+    "optimizer": {
+        "name": "torch_optimizer",
+        "torch_optim_class": "SGD",
+        "lr": 0.002,
+        "momentum": 0.9,
+        "weight_decay": 0.0005
+    },
+    "lr_scheduler": {
+        "name": "poly_scheduler",
+        "epochs": 10,
+        "power": 0.9
+    },
+    "train": {
+        "exp_name": "resnet101_deeplabv2_gtav_512x1024",
+        "workers": 8,
+        "batch_size": 4,
+        "checkpoint": null,
+        "world_size": 0,
+        "dist_url": "env:\/\/",
+        "device": "cuda",
+        "val_num_steps": 1000,
+        "save_dir": ".\/checkpoints",
+        "num_epochs": 10,
+        "collate_fn": null,
+        "input_size": [
+            512,
+            1024
+        ],
+        "original_size": [
+            1024,
+            2048
+        ],
+        "num_classes": 19,
+        "eval_classes": 19,
+        "selector": null,
+        "encoder_only": false,
+        "encoder_size": null,
+        "val_batch_size": 2,
+        "state": 0,
+        "mixed_precision": false,
+        "distributed": false,
+        "validation": true,
+        "exp_dir": ".\/checkpoints\/resnet101_deeplabv2_gtav_512x1024"
+    },
+    "test": {
+        "exp_name": "resnet101_deeplabv2_gtav_512x1024",
+        "workers": 0,
+        "batch_size": 1,
+        "checkpoint": ".\/checkpoints\/resnet101_deeplabv2_gtav_512x1024\/model.pt",
+        "device": "cuda",
+        "save_dir": ".\/checkpoints",
+        "collate_fn": null,
+        "original_size": [
+            1024,
+            2048
+        ],
+        "num_classes": 19,
+        "eval_classes": 19,
+        "selector": null,
+        "encoder_only": false,
+        "encoder_size": null
+    },
+    "model": {
+        "name": "standard_segmentation_model",
+        "pretrained": false,
+        "backbone_cfg": {
+            "name": "predefined_resnet_backbone",
+            "backbone_name": "resnet101",
+            "return_layer": "layer4",
+            "pretrained": true,
+            "replace_stride_with_dilation": [
+                false,
+                true,
+                true
+            ]
+        },
+        "classifier_cfg": {
+            "name": "DeepLabV2Head",
+            "in_channels": 2048,
+            "num_classes": 19
+        }
+    }
+}

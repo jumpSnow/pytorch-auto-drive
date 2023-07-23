@@ -72,13 +72,18 @@ class LaneDetTrainer(BaseTrainer):
                 current_step_num = int(epoch * len(self.dataloader) + i + 1)
 
                 # Record losses
-                if current_step_num % loss_num_steps == (loss_num_steps - 1):
-                    for k in running_loss.keys():
-                        print('[%d, %d] %s: %.4f' % (epoch + 1, i + 1, k, running_loss[k] / loss_num_steps))
-                        # Logging only once
-                        if is_main_process():
-                            self.writer.add_scalar(k, running_loss[k] / loss_num_steps, current_step_num)
-                        running_loss[k] = 0.0
+                # if current_step_num % loss_num_steps == (loss_num_steps - 1):
+                print(f"length of running_loss {len(running_loss)} current_step_num {current_step_num} loss_num_steps {loss_num_steps}")
+                for k in running_loss.keys():
+                    print('[%d, %d] %s: %.4f' % (epoch + 1, i + 1, k, running_loss[k] / loss_num_steps))
+                    # Logging only once
+                    if is_main_process():
+                        val = running_loss[k] / loss_num_steps
+                        self.writer.add_scalar(k, val.item())
+                    running_loss[k] = 0.0
+                print("finish add all scalar")
+                self.writer.next_step()
+                print("finish next_step")
 
                 # Record checkpoints
                 if self._cfg['validation']:
@@ -94,11 +99,9 @@ class LaneDetTrainer(BaseTrainer):
                             mixed_precision=self._cfg['mixed_precision'])
                         if is_main_process():
                             self.writer.add_scalar('test pixel accuracy',
-                                                   test_pixel_accuracy,
-                                                   current_step_num)
+                                                   test_pixel_accuracy)
                             self.writer.add_scalar('test mIoU',
-                                                   test_mIoU,
-                                                   current_step_num)
+                                                   test_mIoU)
                         self.model.train()
 
                         # Record best model (straight to disk)

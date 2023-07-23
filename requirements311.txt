@@ -1,0 +1,14 @@
+p-tqdm
+tqdm
+ujson
+tensorboard
+imageio
+opencv-python
+thop
+Shapely
+scipy
+scikit_learn
+filetype
+importmagician
+timm
+ninja

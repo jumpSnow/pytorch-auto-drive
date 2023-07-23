@@ -1,0 +1,4 @@
+[core]
+    remote = dvc_cache
+['remote "dvc_cache"']
+    url = /home/work/workspace/cache

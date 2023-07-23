@@ -4,8 +4,8 @@
 #include "spline.hpp"
 #include <vector>
 #include <iostream>
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv4/core/core.hpp>
+#include <opencv4/imgproc/imgproc.hpp>
 
 using namespace std;
 using namespace cv;

@@ -1,7 +1,7 @@
-CITYSCAPES_ROOT = '../../dataset/cityscapes'
-PASCAL_ROOT = './data/VOCtrainval_11-May-2012/VOCdevkit/VOC2012'
-GTAV_ROOT = '../../dataset/gtav'
-SYNTHIA_ROOT = '../../dataset/syn/SYNTHIA_RAND_CITYSCPAES'
+CITYSCAPES_ROOT = '/home/work/workspace/pytorch-auto-drive/dataset/cityscapes'
+PASCAL_ROOT = '/home/work/workspace/pytorch-auto-drive/data/VOCtrainval_11-May-2012/VOCdevkit/VOC2012'
+GTAV_ROOT = '/home/work/workspace/pytorch-auto-drive/dataset/gtav'
+SYNTHIA_ROOT = '/home/work/workspace/pytorch-auto-drive/dataset/syn/SYNTHIA_RAND_CITYSCPAES'
 CITY_LABEL_MAP = [
     255, 255, 255, 255, 255, 255, 255,
     0,   1,   255, 255, 2,   3,   4,

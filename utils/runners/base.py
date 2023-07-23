@@ -20,6 +20,7 @@ from ..optimizers import OPTIMIZERS
 from ..transforms import TRANSFORMS
 from ..ddp_utils import init_distributed_mode, is_main_process
 from ..common import load_checkpoint
+from dvclive import Live
 
 
 def get_collate_fn(name):
@@ -40,8 +41,8 @@ def get_sampler(ddp, dataset):
 
 class BaseRunner(ABC):
     def __init__(self, cfg):
-        if torch.backends.cudnn.version() < 8000:
-            torch.backends.cudnn.benchmark = True
+        # if torch.backends.cudnn.version() < 8000:
+        #     torch.backends.cudnn.benchmark = True
         self.model = MODELS.from_dict(cfg['model'])
 
     @abstractmethod
@@ -109,6 +110,16 @@ class BaseRunner(ABC):
             f.write(content)
             fcntl.flock(f, fcntl.LOCK_UN)
 
+class CustomWriter:
+
+    def __init__(self):
+        self.live = Live(save_dvc_exp=True)
+
+    def add_scalar(self, k, v):
+        self.live.log_metric(k, v)
+
+    def next_step(self):
+        self.live.next_step()
 
 class BaseTrainer(BaseRunner):
     def __init__(self, cfg, map_dataset_statics=None):
@@ -170,9 +181,11 @@ class BaseTrainer(BaseRunner):
         return net_without_ddp, device
 
     def get_writer(self):
-        return SummaryWriter(os.path.join(self._cfg['save_dir'],
-                                          'tb_logs',
-                                          self._cfg['exp_name'])) if is_main_process() else None
+        return CustomWriter()
+
+        # return SummaryWriter(os.path.join(self._cfg['save_dir'],
+        #                                   'tb_logs',
+        #                                   self._cfg['exp_name'])) if is_main_process() else None
 
     @staticmethod
     def get_optimizer(optimizer_cfg, net):
